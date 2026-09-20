@@ -1,5 +1,7 @@
 # Evaluación Final: Mosca vs Matemáticas (Hito 7)
 
+![Arquitectura del pipeline biológico](diagrama_matplotlib.png)
+
 Tras entrenar el modelo de decodificación lineal (`Readout`) sobre la actividad neuronal estimulada, hemos evaluado la precisión de la mosca frente a redes de control puramente matemáticas que poseen **exactamente el mismo presupuesto de parámetros**.
 
 ## 📊 Tabla Comparativa de Precisión (Set de Prueba)
