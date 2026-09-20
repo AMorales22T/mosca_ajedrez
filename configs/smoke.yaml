@@ -1,0 +1,8 @@
+seed: 7
+n_positions: 512
+units: 1000
+recurrent_steps: 2
+epochs: 2
+batch_size: 32
+value_weight: 0.2
+connectome_mode: synthetic

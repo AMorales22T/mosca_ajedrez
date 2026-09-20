@@ -1,0 +1,8 @@
+seed: 7
+n_positions: 100000
+units: 2000
+recurrent_steps: 8
+epochs: 20
+batch_size: 128
+value_weight: 0.2
+connectome_mode: hemibrain

@@ -1,0 +1,11 @@
+chess>=1.11
+numpy>=1.26
+pandas>=2.1
+pyarrow>=14
+python-dotenv>=1.0
+PyYAML>=6.0
+requests>=2.31
+torch>=2.2
+zstandard>=0.22
+matplotlib>=3.8
+pytest>=8.0
