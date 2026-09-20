@@ -13,14 +13,4 @@ El set de prueba (Test) consta de 4.813 posiciones de ajedrez nunca vistas duran
 | **Control Aleatorio (RandomSparse)**| **~6.50%** | **~21.00%** |
 | **Matemática Pura (BaselineLinear)**| **6.81%** | **21.96%** |
 
----
 
-## 🔬 Conclusión Científica
-
-**La biología no es magia.** 
-El conectoma de *Drosophila melanogaster* es una red sumamente especializada (identificación de comida, vuelo, feromonas). Si lo utilizas como un reservorio matemático general (*Reservoir Computing*) para una tarea de alta abstracción espacial y no-local como es el Ajedrez, **fracasa de forma estrepitosa**.
-
-1. **La mosca juega al azar:** Su 0.02% de precisión Top-1 equivale literalmente a elegir una casilla origen y destino al azar ($1 / 4096 \approx 0.024\%$). La topología biológica colapsa, interfiere o "apaga" las señales complejas del tablero.
-2. **Las redes aleatorias le ganan:** Un cerebro inicializado con pesos y conexiones completamente aleatorias (`RandomSparse`) o una red densa estándar (`BaselineLinear`) aprenden a encontrar patrones de ajedrez y consiguen casi un **22% de acierto en el Top-3** con tan solo 5 épocas de entrenamiento. La matemática abstracta distribuye la información de forma uniforme, mientras que la biología la concentra en cuellos de botella específicos (ganglios) que son inútiles para el ajedrez.
-
-El experimento demuestra empíricamente que **la estructura conectómica real de un insecto destruye la información útil para el ajedrez** en comparación con una red matemática aleatoria.
