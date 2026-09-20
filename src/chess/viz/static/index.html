@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mosca Ajedrez - Visualizador Avanzado</title>
+    <style>
+        body { margin: 0; background: #0a0a0a; color: #eee; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Panel Izquierdo: Ajedrez y UI */
+        #ui-panel { width: 350px; min-width: 350px; background: #1a1a1a; display: flex; flex-direction: column; border-right: 1px solid #333; z-index: 10; box-shadow: 2px 0 10px rgba(0,0,0,0.5); }
+        
+        /* Tablero */
+        #board-container { padding: 15px; display: flex; justify-content: center; background: #222; }
+        #board { display: grid; grid-template-columns: repeat(8, 36px); grid-template-rows: repeat(8, 36px); border: 2px solid #444; }
+        .square { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #111; position: relative; }
+        .white-sq { background: #eeeed2; }
+        .black-sq { background: #769656; }
+        .highlight { position: absolute; width: 100%; height: 100%; background: rgba(255, 255, 0, 0.4); pointer-events: none; }
+        
+        /* Info Partida */
+        .info-box { padding: 15px; border-bottom: 1px solid #333; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .tag { background: #aa0000; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; letter-spacing: 1px; }
+        .demo-banner { position: absolute; top: 58px; right: 12px; z-index: 5; background: #7b1fa2; color: white; border: 1px solid #d48cf2; border-radius: 5px; padding: 7px 12px; font: bold 12px monospace; letter-spacing: .5px; box-shadow: 0 2px 8px rgba(0,0,0,.35); }
+        #neural-inspector { position: absolute; right: 12px; bottom: 12px; z-index: 5; width: 250px; padding: 10px; background: rgba(10,18,26,.86); border: 1px solid #456; border-radius: 6px; color: #d8e8ef; font: 12px monospace; }
+        #raster { height: 42px; margin-top: 7px; background: repeating-linear-gradient(0deg, #17212b 0 3px, #23313a 3px 4px); position: relative; overflow: hidden; }
+        .raster-spike { position: absolute; bottom: 0; width: 2px; height: 100%; background: #58e8a0; }
+        
+        .phase-indicator { font-family: monospace; color: #0f0; margin: 10px 0; padding: 5px; background: #000; border-radius: 4px; border: 1px solid #0f0; text-align: center; }
+        
+        /* Top Candidatas */
+        .candidates { font-family: monospace; font-size: 13px; margin-top: 10px; }
+        .candidate-row { display: flex; justify-content: space-between; padding: 2px 0; border-bottom: 1px dashed #444; }
+        .candidate-row.chosen { color: #0f0; font-weight: bold; }
+        
+        /* Panel Derecho: 3D */
+        #scene-container { flex-grow: 1; position: relative; background: #17212b; }
+        #canvas3d { width: 100%; height: 100%; display: block; }
+        
+        /* Controles de Vista */
+        #view-controls { position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; }
+        button { background: #333; color: white; border: 1px solid #555; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+        button:hover { background: #444; }
+        
+    </style>
+    <!-- Three.js y dependencias para GLTF y OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+</head>
+<body>
+
+    <div id="ui-panel">
+        <div class="info-box">
+            <div class="header">
+                <strong id="match-title">Mosca (Biológica) vs Oponente (Aleatorio)</strong>
+                <span class="tag" id="model-tag">DEMO / SIN ENTRENAR</span>
+            </div>
+            <div style="font-size: 12px; color: #aaa;">Partida: <span id="game-counter">1</span> | Jugada: <span id="move-counter">1</span></div>
+            <div class="phase-indicator" id="phase">ESPERANDO POSICIÓN</div>
+        </div>
+        
+        <div id="board-container">
+            <div id="board"></div>
+        </div>
+        
+        <div class="info-box">
+            <strong>Decisiones de la Mosca</strong>
+            <div class="candidates" id="candidates-list">
+                <!-- Se llenará dinámicamente -->
+            </div>
+        </div>
+        
+        <div class="info-box" style="flex-grow: 1; overflow-y: auto;">
+            <strong>Historial</strong>
+            <div id="move-history" style="font-family: monospace; font-size: 12px; margin-top: 5px; color: #888;"></div>
+        </div>
+    </div>
+
+    <div id="scene-container">
+        <div id="error-overlay" style="position:absolute; top:0; left:0; color:red; z-index:999; font-size: 20px; background: rgba(0,0,0,0.8); padding: 20px;"></div>
+        <div class="demo-banner">DEMO / SIN ENTRENAR · NEURONAS PROCEDURALES</div>
+        <div id="neural-inspector">
+            <div><strong>INSPECTOR NEURONAL</strong> <span id="neural-count">0 spikes</span></div>
+            <label>Umbral <input id="spike-threshold" type="range" min="0.8" max="0.99" step="0.01" value="0.96"></label>
+            <div id="neural-selection">Sin selección · central_brain / optic_lobe / vnc</div>
+            <div id="raster"></div>
+        </div>
+        <canvas id="canvas3d"></canvas>
+        <div id="view-controls">
+            <button onclick="setSplitView(false)">Vista Única</button>
+            <button onclick="setSplitView(true)">Vista Dividida (Cuerpo / Cerebro)</button>
+        </div>
+    </div>
+
+    <script>
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            document.getElementById('error-overlay').innerText += '\n' + msg + ' at ' + lineNo + ':' + columnNo;
+            return false;
+        };
+    </script>
+    <script src="/static/app.js?v=8"></script>
+</body>
+</html>

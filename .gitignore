@@ -1,8 +1,10 @@
-.env
+venv/
 __pycache__/
-.pytest_cache/
-data/raw/*
-data/processed/*
-runs/*
-!data/raw/.gitkeep
-!data/processed/.gitkeep
+*.pyc
+*.npy
+*.npz
+*.pt
+.DS_Store
+screenshot.png
+screenshot2.png
+get_logs.py
