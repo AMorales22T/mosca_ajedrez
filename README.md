@@ -1,6 +1,6 @@
 # Drosophila Chess Prediction: Biological Reservoir Computing Experiment
 
-![Arquitectura del pipeline biológico](diagrama_matplotlib.png)
+![Arquitectura del pipeline biológico](fig_fly_chess.png)
 
 Tras entrenar el modelo de decodificación lineal (`Readout`) sobre la actividad neuronal estimulada, hemos evaluado la precisión de la mosca frente a redes de control puramente matemáticas que poseen **exactamente el mismo presupuesto de parámetros**.
 
