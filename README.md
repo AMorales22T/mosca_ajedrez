@@ -1,4 +1,4 @@
-# Evaluación Final: Mosca vs Matemáticas (Hito 7)
+# Drosophila Chess Prediction: Biological Reservoir Computing Experiment
 
 ![Arquitectura del pipeline biológico](diagrama_matplotlib.png)
 
