@@ -16,3 +16,11 @@ El set de prueba (Test) consta de 4.813 posiciones de ajedrez nunca vistas duran
 | **Matemática Pura (BaselineLinear)**| **6.81%** | **21.96%** |
 
 
+
+## 📁 Origen de los Datos y Referencias
+
+Toda la canalización biológica y el entrenamiento han sido posibles gracias al uso de repositorios de datos abiertos masivos:
+- **Partidas de Ajedrez**: Extraídas directamente de los archivos públicos de **[Lichess.org](https://database.lichess.org/)**. Se filtraron partidas estándar con jugadores de un Elo superior a 2000 para garantizar que los patrones visuales fuesen representativos de alta calidad estratégica.
+- **Conectoma Biológico**: Toda la matriz de sinapsis neuronales utilizada para la simulación del reservorio (*Spiking Neural Network*) procede del consorcio **[FlyWire (versión 783)](https://flywire.ai/)**, el cual mapeó con resolución microscópica electrónica el cerebro completo de una *Drosophila melanogaster*.
+
+> **Nota visual**: El diagrama del flujo de trabajo arquitectónico generado en Python está inspirado directamente en el estilo visual y esquemático de las figuras del manuscrito celular de referencia.
